@@ -36,7 +36,7 @@ ruby_block 'create_random' do
   begin
     cmd = Mixlib::ShellOut.new('head -c 20 /dev/urandom | sha1sum  | rev | cut -c 4- | rev')
     cmd.run_command
-    node.set['mozilla-sync']['auth_secret'] = cmd.stdout
+    node.set_unless['mozilla-sync']['auth_secret'] = cmd.stdout
   end
   only_if { node['mozilla-sync']['auth_secret'].nil? }
 end
