@@ -43,7 +43,7 @@ end
 
 template "#{node['mozilla-sync']['target_dir']}/syncserver.ini" do
   variables(
-      public_url: "http://#{node['fqdn']}:5000",
+      public_url: "https://#{node['fqdn']}",
       secret: node['mozilla-sync']['auth_secret']
   )
   notifies :reload, 'service[sync]', :delayed
