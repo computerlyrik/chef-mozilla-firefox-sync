@@ -34,7 +34,7 @@ end
 
 ruby_block 'create_random' do
   begin
-    cmd = Chef::ShellOut.new('head -c 20 /dev/urandom | sha1sum  | rev | cut -c 4- | rev')
+    cmd = Mixlib::ShellOut.new('head -c 20 /dev/urandom | sha1sum  | rev | cut -c 4- | rev')
     cmd.run_command
     node.set['mozilla-sync']['auth_secret'] = cmd.stdout
   end
@@ -46,18 +46,18 @@ template "#{node['mozilla-sync']['target_dir']}/syncserver.ini" do
       public_url: "http://#{node['fqdn']}:5000",
       secret: node['mozilla-sync']['auth_secret']
   )
-  notifies :reload, 'service[sync]', :immediately
+  notifies :reload, 'service[sync]', :delayed
 end
 
 cmd = "#{node['mozilla-sync']['target_dir']}/local/bin/pserve #{node['mozilla-sync']['target_dir']}/syncserver.ini"
+start_cmd = "#{cmd} --daemon --log-file=#{node['mozilla-sync']['logfile']}"
+stop_cmd = "#{cmd} --stop-daemon"
 
-Chef::Log.info(cmd)
 service 'sync' do
-  service_name nil
-  init_command nil
-  start_command "#{cmd} --daemon --log-file=#{node['mozilla-sync']['logfile']}"
-  stop_command "#{cmd} --stop-daemon"
+  start_command start_cmd
+  stop_command stop_cmd
   reload_command "#{cmd} --reload"
+  restart_command "#{stop_cmd} || true && #{start_cmd}"
   supports start: true, stop: true, reload: true
   action :start
 end
