@@ -16,3 +16,4 @@ default['mozilla-sync']['ssl_certificate'] = "/etc/nginx/ssl/certs/#{node['fqdn'
 default['mozilla-sync']['ssl_certificate_key'] = "/etc/nginx/ssl/private/#{node['fqdn']}.key"
 
 default['mozilla-sync']['logfile'] = '/var/log/mozilla-sync.log'
+default['mozilla-sync']['allow_new_users'] = false

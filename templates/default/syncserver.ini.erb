@@ -18,8 +18,6 @@ sqluri = sqlite:////<%= node['mozilla-sync']['target_dir'] %>/syncserver.db
 
 secret = <%= @secret %>
 
-# Set this to "false" to disable new-user signups on the server.
-# Only request by existing accounts will be honoured.
-# allow_new_users = false
+allow_new_users = <%= node['mozilla-sync']['allow_new_users'] %>
 
 
