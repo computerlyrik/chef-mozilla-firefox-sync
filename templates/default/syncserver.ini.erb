@@ -14,15 +14,8 @@ use = egg:syncserver
 public_url = <%= @public_url %>/
 
 # This defines the database in which to store all server data.
-sqluri = sqlite:////<%= node['sync-1.5']['target_dir'] %>/syncserver.db
+sqluri = sqlite:////<%= node['mozilla-sync']['target_dir'] %>/syncserver.db
 
-# This is a secret key used for signing authentication tokens.
-# It should be long and randomly-generated.
-# The following command will give a suitable value on *nix systems:
-#
-#    head -c 20 /dev/urandom | sha1sum
-#
-# If not specified then the server will generate a temporary one at startup.
 secret = <%= @secret %>
 
 # Set this to "false" to disable new-user signups on the server.
