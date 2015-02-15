@@ -8,5 +8,6 @@ version           '0.2.0'
 
 depends 'nginx'
 depends 'certificate'
+depends 'git'
 
 supports 'debian'
