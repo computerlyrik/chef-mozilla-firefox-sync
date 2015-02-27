@@ -1,0 +1,15 @@
+# description "Start the fx-sync-server"
+
+start on runlevel [2345]
+stop on runlevel [^2345]
+
+console log
+chdir <%= node['mozilla-firefox-sync']['server']['path'] %>
+setuid fxcloud
+setgid fxcloud
+
+env HOME=/home/fxcloud
+respawn
+respawn limit 20 5
+
+exec make serve
