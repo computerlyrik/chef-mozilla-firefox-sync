@@ -11,4 +11,4 @@ depends 'nginx'
 depends 'certificate'
 depends 'git'
 
-supports 'debian'
+supports 'ubuntu'

@@ -13,22 +13,23 @@ package 'make'
 include_recipe 'git' # package 'git-core'
 package 'python-virtualenv'
 
-git node['mozilla-sync']['target_dir'] do
-  repository node['mozilla-sync']['repository']
+git node['mozilla-firefox-sync']['server']['path'] do
+  repository 'https://github.com/mozilla-services/syncserver'
+  revision node['mozilla-firefox-sync']['server']['version']
   action :checkout
   notifies :run, 'bash[build_source]', :immediately
 end
 
 bash 'build_source' do
   code 'make build'
-  cwd node['mozilla-sync']['target_dir']
+  cwd node['mozilla-firefox-sync']['server']['path']
   action :nothing
   notifies :run, 'bash[install_gunicorn]', :immediately
 end
 
 bash 'install_gunicorn' do
   code './local/bin/easy_install gunicorn'
-  cwd node['mozilla-sync']['target_dir']
+  cwd node['mozilla-firefox-sync']['server']['path']
   action :nothing
 end
 
@@ -36,20 +37,20 @@ ruby_block 'create_random' do
   begin
     cmd = Mixlib::ShellOut.new('head -c 20 /dev/urandom | sha1sum  | rev | cut -c 4- | rev')
     cmd.run_command
-    node.set_unless['mozilla-sync']['auth_secret'] = cmd.stdout
+    node.set_unless['mozilla-firefox-sync']['auth_secret'] = cmd.stdout
   end
-  only_if { node['mozilla-sync']['auth_secret'].nil? }
+  only_if { node['mozilla-firefox-sync']['auth_secret'].nil? }
 end
 
-template "#{node['mozilla-sync']['target_dir']}/syncserver.ini" do
+template "#{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini" do
   variables(
       public_url: "https://#{node['fqdn']}",
-      secret: node['mozilla-sync']['auth_secret']
+      secret: node['mozilla-firefox-sync']['auth_secret']
   )
   notifies :reload, 'service[sync]', :delayed
 end
 
-cmd = "#{node['mozilla-sync']['target_dir']}/local/bin/pserve #{node['mozilla-sync']['target_dir']}/syncserver.ini"
+cmd = "#{node['mozilla-firefox-sync']['server']['path']}/local/bin/pserve #{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini"
 start_cmd = "#{cmd} --daemon --log-file=#{node['mozilla-sync']['logfile']}"
 stop_cmd = "#{cmd} --stop-daemon"
 
