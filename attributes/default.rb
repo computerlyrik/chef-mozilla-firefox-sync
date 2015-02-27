@@ -18,6 +18,5 @@ default['mozilla-sync']['ssl_certificate_key'] = "/etc/nginx/ssl/private/#{node[
 default['mozilla-sync']['logfile'] = '/var/log/mozilla-sync.log'
 default['mozilla-sync']['allow_new_users'] = false
 
-
 default['mozilla-firefox-sync']['server']['path'] = '/srv/fx/sync-server'
 default['mozilla-firefox-sync']['server']['version'] = 'c4c0fa033aeb08646008e4969519619178d4a12b'

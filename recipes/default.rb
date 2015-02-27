@@ -10,9 +10,8 @@ require 'chef/shell_out'
 
 package 'python-dev'
 package 'make'
-include_recipe 'git' #package 'git-core'
+include_recipe 'git' # package 'git-core'
 package 'python-virtualenv'
-
 
 git node['mozilla-sync']['target_dir'] do
   repository node['mozilla-sync']['repository']
