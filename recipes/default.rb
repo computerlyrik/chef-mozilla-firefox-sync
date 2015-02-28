@@ -62,6 +62,6 @@ case node['platform']
 when 'ubuntu'
   include_recipe 'mozilla-firefox-sync::init_ubuntu'
 when 'debian'
-  include_recipe 'mozilla-firefox-sync::init_ubuntu'
+  include_recipe 'mozilla-firefox-sync::init_debian'
 end
 

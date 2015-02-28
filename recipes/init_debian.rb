@@ -7,7 +7,7 @@
 # All rights reserved - Do Not Redistribute
 #
 cmd = "#{node['mozilla-firefox-sync']['server']['path']}/local/bin/pserve #{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini"
-start_cmd = "#{cmd} --daemon --log-file=#{node['mozilla-sync']['logfile']}"
+start_cmd = "#{cmd} --daemon --log-file=#{node['mozilla-firefox-sync']['logfile']}"
 stop_cmd = "#{cmd} --stop-daemon"
 
 service 'fx-sync-server' do
