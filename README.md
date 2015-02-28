@@ -15,7 +15,9 @@ TODO: List your cookbook requirements. Be sure to include any requirements this 
 
 e.g.
 #### packages
-- `toaster` - mozilla-sync needs toaster to brown your bagel.
+- `nginx`
+- `certificate`
+- `nodejs`
 
 Attributes
 ----------

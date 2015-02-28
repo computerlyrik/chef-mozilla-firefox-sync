@@ -8,10 +8,16 @@
 #
 require 'chef/shell_out'
 
+include_recipe 'git'
+include_recipe 'nodejs'
+
 package 'python-dev'
 package 'make'
-include_recipe 'git' # package 'git-core'
 package 'python-virtualenv'
+
+directory node['mozilla-firefox-sync']['server']['path'] do
+  recursive true
+end
 
 git node['mozilla-firefox-sync']['server']['path'] do
   repository node['mozilla-firefox-sync']['repository']

@@ -10,5 +10,7 @@ source_url "https://github.com/computerlyrik/chef-mozilla-firefox-sync.git"
 depends 'nginx'
 depends 'certificate'
 depends 'git'
+depends 'nodejs'
 
 supports 'ubuntu'
+supports 'debian'
