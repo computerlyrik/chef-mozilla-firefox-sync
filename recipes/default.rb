@@ -51,7 +51,7 @@ end
 template "#{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini" do
   variables(
       public_url: "https://#{node['fqdn']}",
-      db_dir: node['mozilla-firefox-sync']['target_dir'],
+      db_dir: node['mozilla-firefox-sync']['server']['path'],
       secret: node['mozilla-firefox-sync']['auth_secret'],
       allow_new_users: node['mozilla-firefox-sync']['allow_new_users']
   )
@@ -65,4 +65,3 @@ when 'debian'
   include_recipe 'mozilla-firefox-sync::init_ubuntu'
 end
 
-include_recipe 'mozilla-firefox-sync::nginx'
