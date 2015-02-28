@@ -10,7 +10,7 @@ cmd = "#{node['mozilla-firefox-sync']['server']['path']}/local/bin/pserve #{node
 start_cmd = "#{cmd} --daemon --log-file=#{node['mozilla-sync']['logfile']}"
 stop_cmd = "#{cmd} --stop-daemon"
 
-service 'sync' do
+service 'fx-sync-server' do
   start_command start_cmd
   stop_command stop_cmd
   reload_command "#{cmd} --reload"

@@ -55,7 +55,7 @@ template "#{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini" do
       secret: node['mozilla-firefox-sync']['auth_secret'],
       allow_new_users: node['mozilla-firefox-sync']['allow_new_users']
   )
-  notifies :reload, 'service[sync]', :delayed
+  notifies :reload, 'service[fx-sync-server]', :delayed
 end
 
 case node['platform']
