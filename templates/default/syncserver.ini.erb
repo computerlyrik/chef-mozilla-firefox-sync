@@ -14,10 +14,10 @@ use = egg:syncserver
 public_url = <%= @public_url %>/
 
 # This defines the database in which to store all server data.
-sqluri = sqlite:////<%= node['mozilla-sync']['target_dir'] %>/syncserver.db
+sqluri = sqlite:////<%= @db_dir %>/syncserver.db
 
 secret = <%= @secret %>
 
-allow_new_users = <%= node['mozilla-sync']['allow_new_users'] %>
+allow_new_users = <%= @allow_new_users %>
 
 

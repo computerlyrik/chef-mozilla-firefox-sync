@@ -14,7 +14,7 @@ include_recipe 'git' # package 'git-core'
 package 'python-virtualenv'
 
 git node['mozilla-firefox-sync']['server']['path'] do
-  repository 'https://github.com/mozilla-services/syncserver'
+  repository node['mozilla-firefox-sync']['repository']
   revision node['mozilla-firefox-sync']['server']['version']
   action :checkout
   notifies :run, 'bash[build_source]', :immediately
@@ -45,7 +45,9 @@ end
 template "#{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini" do
   variables(
       public_url: "https://#{node['fqdn']}",
-      secret: node['mozilla-firefox-sync']['auth_secret']
+      db_dir: node['mozilla-sync']['target_dir'],
+      secret: node['mozilla-firefox-sync']['auth_secret'],
+      allow_new_users: node['mozilla-sync']['allow_new_users']
   )
   notifies :reload, 'service[sync]', :delayed
 end
@@ -66,10 +68,10 @@ end
 include_recipe 'nginx'
 
 certificate_manage 'mozilla-sync' do
-  search_id node['mozilla-sync']['certificate_databag_id']
+  search_id node['mozilla-firefox-sync']['certificate_databag_id']
   cert_path '/etc/nginx/ssl'
   nginx_cert true
-  not_if { node['mozilla-sync']['certificate_databag_id'].nil? }
+  not_if { node['mozilla-firefox-sync']['certificate_databag_id'].nil? }
 end
 
 template '/etc/nginx/sites-available/syncserver' do
@@ -80,8 +82,8 @@ template '/etc/nginx/sites-available/syncserver' do
   notifies :restart, 'service[nginx]'
   variables(
       server_name: node['fqdn'],
-      ssl_certificate: node['mozilla-sync']['ssl_certificate'],
-      ssl_certificate_key: node['mozilla-sync']['ssl_certificate_key']
+      ssl_certificate: node['mozilla-firefox-sync']['ssl_certificate'],
+      ssl_certificate_key: node['mozilla-firefox-sync']['ssl_certificate_key']
   )
 end
 
@@ -93,3 +95,6 @@ end
 nginx_site 'default' do
   enable false
 end
+
+# program_path: node['mozilla-firefox-sync']['server']['path']
+
