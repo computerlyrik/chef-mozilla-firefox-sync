@@ -5,10 +5,11 @@ stop on runlevel [^2345]
 
 console log
 chdir <%= @program_path %>
-setuid fxcloud
-setgid fxcloud
 
-env HOME=/home/fxcloud
+# setuid fxcloud
+# setgid fxcloud
+
+env NODE_ENV=prod 
 respawn
 respawn limit 20 5
 

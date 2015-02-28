@@ -7,7 +7,10 @@
 # All rights reserved - Do Not Redistribute
 #
 template '/etc/init/fx-sync-server.conf' do
-  source 'upstart-sync-server.conf.erb'
+  source 'upstart.conf.erb'
+  variables(
+      program_path: node['mozilla-firefox-sync']['server']['path']
+  )
 end
 
 service 'fx-sync-server' do
