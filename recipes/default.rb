@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: mozilla-sync
+# Cookbook Name:: mozilla-firefox-sync
 # Recipe:: default
 #
-# Copyright 2014, computerlyrik, Christian Fischer
+# Copyright 2014, 2015 computerlyrik, Christian Fischer
 #
 # All rights reserved - Do Not Redistribute
 #
@@ -45,56 +45,18 @@ end
 template "#{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini" do
   variables(
       public_url: "https://#{node['fqdn']}",
-      db_dir: node['mozilla-sync']['target_dir'],
+      db_dir: node['mozilla-firefox-sync']['target_dir'],
       secret: node['mozilla-firefox-sync']['auth_secret'],
-      allow_new_users: node['mozilla-sync']['allow_new_users']
+      allow_new_users: node['mozilla-firefox-sync']['allow_new_users']
   )
   notifies :reload, 'service[sync]', :delayed
 end
 
-cmd = "#{node['mozilla-firefox-sync']['server']['path']}/local/bin/pserve #{node['mozilla-firefox-sync']['server']['path']}/syncserver.ini"
-start_cmd = "#{cmd} --daemon --log-file=#{node['mozilla-sync']['logfile']}"
-stop_cmd = "#{cmd} --stop-daemon"
-
-service 'sync' do
-  start_command start_cmd
-  stop_command stop_cmd
-  reload_command "#{cmd} --reload"
-  restart_command "#{stop_cmd} || true && #{start_cmd}"
-  supports start: true, stop: true, reload: true
-  action :start
+case node['platform']
+when 'ubuntu'
+  include_recipe 'mozilla-firefox-sync::init_ubuntu'
+when 'debian'
+  include_recipe 'mozilla-firefox-sync::init_ubuntu'
 end
 
-include_recipe 'nginx'
-
-certificate_manage 'mozilla-sync' do
-  search_id node['mozilla-firefox-sync']['certificate_databag_id']
-  cert_path '/etc/nginx/ssl'
-  nginx_cert true
-  not_if { node['mozilla-firefox-sync']['certificate_databag_id'].nil? }
-end
-
-template '/etc/nginx/sites-available/syncserver' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  source 'nginx.syncserver.erb'
-  notifies :restart, 'service[nginx]'
-  variables(
-      server_name: node['fqdn'],
-      ssl_certificate: node['mozilla-firefox-sync']['ssl_certificate'],
-      ssl_certificate_key: node['mozilla-firefox-sync']['ssl_certificate_key']
-  )
-end
-
-nginx_site 'syncserver' do
-  enable true
-end
-
-# Disable default site
-nginx_site 'default' do
-  enable false
-end
-
-# program_path: node['mozilla-firefox-sync']['server']['path']
-
+include_recipe 'mozilla-firefox-sync::nginx'
