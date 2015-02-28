@@ -1,4 +1,4 @@
-name              'mozilla-sync'
+name              'mozilla-firefox-sync'
 maintainer        'computerlyrik, Christian Fischer'
 maintainer_email  'chef-cookbooks@computerlyrik.de'
 license           'All rights reserved'

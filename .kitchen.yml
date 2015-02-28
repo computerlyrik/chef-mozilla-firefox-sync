@@ -12,5 +12,5 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[mozilla-sync::default]
+      - recipe[mozilla-firefox-sync::default]
     attributes:
