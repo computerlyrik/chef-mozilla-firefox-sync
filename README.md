@@ -43,19 +43,11 @@ e.g.
 Usage
 -----
 #### mozilla-sync::default
-TODO: Write usage instructions for each cookbook.
 
-e.g.
-Just include `mozilla-sync` in your node's `run_list`:
+Just include `mozilla-firefox-sync` in your node's `run_list`.
 
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[mozilla-sync]"
-  ]
-}
-```
+If you like to proxy with nginx (and use SSL), also include `mozilla-firefox-sync::nginx`
+
 
 Contributing
 ------------
